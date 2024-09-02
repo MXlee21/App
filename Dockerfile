@@ -5,16 +5,16 @@ FROM node:20
 WORKDIR /app
 
 # Copy package.json and package-lock.json from the root of the repository
-COPY App/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
 # Copy the scripts directory
-COPY App/scripts ./scripts
+COPY scripts ./scripts
 
 # Copy the rest of the application code
-COPY App/ .
+COPY . .
 
 # Run the post-install script
 RUN sh ./scripts/postInstall.sh
