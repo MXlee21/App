@@ -4,18 +4,26 @@ FROM node:20
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json and package-lock.json from the root of the repository
+COPY App/package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
+
+# Copy the scripts directory
+COPY App/scripts ./scripts
 
 # Copy the rest of the application code
-COPY . .
+COPY App/ .
+
+# Run the post-install script
+RUN sh ./scripts/postInstall.sh
 
 # Build the project
-RUN npm run web
+RUN npm run build --if-present
 
-# Expose port and define the command to run the app
+# Expose the port the app runs on
 EXPOSE 3000
+
+# Define the command to run the application
 CMD ["npm", "start"]
